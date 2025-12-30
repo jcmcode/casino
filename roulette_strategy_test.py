@@ -1,36 +1,47 @@
 import random
 
-def payouts(outcome, bet_type,):
-    first_dozen = range(1, 13)
-    second_dozen = range(13, 25)
-    third_dozen = range(25, 37)
-    first_half = range(1, 19)
-    second_half = range(19, 37)
-    payouts = {first_dozen: 3,
-               second_dozen: 3,
-               third_dozen: 3,
-                first_half: 2,
-                second_half: 2,
-               'red': 2,
-               'black': 2,
-               'even': 2,
-               'odd': 2,
-               'individual': 36}
+def get_payout_multiplier(outcome, bet_type):
+    definitions = {
+        'first_dozen': (range(1, 13), 3),
+        'second_dozen': (range(13, 25), 3),
+        'third_dozen': (range(25, 37), 3),
+        'first_half': (range(1, 19), 2),
+        'second_half': (range(19, 37), 2),
+        'individual': (range(outcome, outcome + 1), 36)
+    }
     
-    if outcome in bet_type:
-        return payouts[bet_type]
-    else:    
-        return 0
-    
-    
+    if bet_type in definitions:
+        winning_numbers, multiplier = definitions[bet_type]
+        if outcome in winning_numbers:
+            return multiplier
+    return 0
 
-def roulette_strategy(balance, target):
-    bet_type = ['first_dozen'
-                'second_dozen'
-                ]
-    while balance > 0 or balance < target:
-        print(1)
+def roulette_strategy_one(balance, target):
+    current_balance = balance
+    
+    while 0 < current_balance < target:
+        spin = random.randint(0, 36)
+        
+        bets = [
+            {'type': 'second_half', 'amount': 120},
+            {'type': 'first_dozen', 'amount': 80}
+        ]
+        
+        total_wagered = sum(bet['amount'] for bet in bets)
+        
+        if current_balance < total_wagered:
+            break
 
+        current_balance -= total_wagered
+        
+        round_winnings = 0
+        for bet in bets:
+            multiplier = get_payout_multiplier(spin, bet['type'])
+            round_winnings += bet['amount'] * multiplier
+            
+        current_balance += round_winnings
+
+    return current_balance
 
 if __name__ == "__main__":
     starting_balance = 500
