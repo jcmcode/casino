@@ -71,7 +71,7 @@ def run_simulation(simulations, start_balance, target_balance):
 # --- CONFIGURATION ---
 sim_count = 1000
 start_money = 500
-target_money = 500
+target_money = 540
 
 data = run_simulation(sim_count, start_money, target_money)
 
