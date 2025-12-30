@@ -1,5 +1,7 @@
 import random
 
+import matplotlib.pyplot as plt
+
 def get_payout_multiplier(outcome, bet_type):
     definitions = {
         'first_dozen': (range(1, 13), 3),
@@ -43,7 +45,55 @@ def roulette_strategy_one(balance, target):
 
     return current_balance
 
-if __name__ == "__main__":
-    starting_balance = 500
-    target_balance = 1000
-    roulette_strategy_one(starting_balance, target_balance)
+def run_simulation(simulations, start_balance, target_balance):
+    results = {
+        'hit_target': 0,
+        'went_broke': 0,
+        'final_balances': [],
+        'rounds_played': []
+    }
+
+    for _ in range(simulations):
+        final_balance, rounds = roulette_strategy_one(start_balance, target_balance)
+        
+        results['final_balances'].append(final_balance)
+        results['rounds_played'].append(rounds)
+        
+        if final_balance >= target_balance:
+            results['hit_target'] += 1
+        else:
+            results['went_broke'] += 1
+            
+    return results
+
+# --- CONFIGURATION ---
+sim_count = 100
+start_money = 1000
+target_money = 2000
+
+data = run_simulation(sim_count, start_money, target_money)
+
+# --- STATISTICS OUTPUT ---
+print(f"Simulations Run: {sim_count}")
+print(f"Target Hit: {data['hit_target']} times ({data['hit_target']/sim_count*100}%)")
+print(f"Went Broke: {data['went_broke']} times ({data['went_broke']/sim_count*100}%)")
+print(f"Avg Rounds Played: {sum(data['rounds_played']) / sim_count}")
+
+# --- MATPLOTLIB VISUALIZATION ---
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Chart 1: Win/Loss Ratio
+labels = ['Hit Target', 'Went Broke']
+counts = [data['hit_target'], data['went_broke']]
+ax1.bar(labels, counts, color=['green', 'red'])
+ax1.set_title('Win vs Loss Distribution')
+ax1.set_ylabel('Count')
+
+# Chart 2: Rounds Survived Histogram
+ax2.hist(data['rounds_played'], bins=20, color='skyblue', edgecolor='black')
+ax2.set_title('Distribution of Rounds Played')
+ax2.set_xlabel('Rounds Survived')
+ax2.set_ylabel('Frequency')
+
+plt.tight_layout()
+plt.show()
