@@ -20,8 +20,10 @@ def get_payout_multiplier(outcome, bet_type):
 
 def roulette_strategy_one(balance, target):
     current_balance = balance
+    rounds = 0  # <--- Initialize round counter
     
     while 0 < current_balance < target:
+        rounds += 1  # <--- Count the round
         spin = random.randint(0, 36)
         
         bets = [
@@ -43,7 +45,7 @@ def roulette_strategy_one(balance, target):
             
         current_balance += round_winnings
 
-    return current_balance
+    return current_balance, rounds  
 
 def run_simulation(simulations, start_balance, target_balance):
     results = {
@@ -67,9 +69,9 @@ def run_simulation(simulations, start_balance, target_balance):
     return results
 
 # --- CONFIGURATION ---
-sim_count = 100
-start_money = 1000
-target_money = 2000
+sim_count = 1000
+start_money = 500
+target_money = 500
 
 data = run_simulation(sim_count, start_money, target_money)
 
