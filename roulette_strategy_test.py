@@ -1,28 +1,35 @@
 import random
 
-def payouts(balance, target):
-
-    first_dozen = [1,2,3,4,5,6,7,8,9,10,11,12]
-    second_dozen = [13,14,15,16,17,18,19,20,21,22,23,24]
-    third_dozen = [25,26,27,28,29,30,31,32,33,34,35,36]
-    
-    all_numbers = [1,2,3,4,5,6,7,8,9,10,11,12,
-                   13,14,15,16,17,18,19,20,21,22,23,24,
-                   25,26,27,28,29,30,31,32,33,34,35,36,0]
-    
+def payouts(outcome, bet_type,):
+    first_dozen = range(1, 13)
+    second_dozen = range(13, 25)
+    third_dozen = range(25, 37)
+    first_half = range(1, 19)
+    second_half = range(19, 37)
     payouts = {first_dozen: 3,
                second_dozen: 3,
                third_dozen: 3,
+                first_half: 2,
+                second_half: 2,
                'red': 2,
                'black': 2,
                'even': 2,
                'odd': 2,
                'individual': 36}
     
+    if outcome in bet_type:
+        return payouts[bet_type]
+    else:    
+        return 0
+    
+    
 
 def roulette_strategy(balance, target):
+    bet_type = ['first_dozen'
+                'second_dozen'
+                ]
     while balance > 0 or balance < target:
-        
+        print(1)
 
 
 if __name__ == "__main__":
