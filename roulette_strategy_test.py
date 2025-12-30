@@ -46,4 +46,4 @@ def roulette_strategy_one(balance, target):
 if __name__ == "__main__":
     starting_balance = 500
     target_balance = 1000
-    roulette_strategy(starting_balance, target_balance)
+    roulette_strategy_one(starting_balance, target_balance)
